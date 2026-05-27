@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { MessagePlugin } from 'tdesign-vue-next'
-import { useI18n } from 'vue-i18n'
 import {
   createDataSource,
-  updateDataSource,
+  deleteDataSource,
+  deleteDataSourceCredentials,
+  listResources,
+  putDataSourceCredentials,
   triggerSync,
+  updateDataSource,
   validateConnection,
   validateCredentials,
-  listResources,
-  deleteDataSource,
-  putDataSourceCredentials,
-  deleteDataSourceCredentials,
   type DataSource,
   type Resource,
 } from '@/api/datasource'
+import { MessagePlugin } from 'tdesign-vue-next'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import DataSourceTypeIcon from './DataSourceTypeIcon.vue'
 
 const props = defineProps<{
@@ -247,6 +247,19 @@ const connectorDefs = computed<ConnectorDef[]>(() => [
     fields: [
       { key: 'api_token', labelKey: 'datasource.field.apiToken', placeholder: '', secret: true },
       { key: 'base_url', labelKey: 'datasource.field.baseUrl', placeholder: 'https://www.yuque.com', optional: true, hintKey: 'datasource.field.baseUrlHint' },
+    ],
+  },
+  {
+    type: 'confluence',
+    available: true,
+    docUrl: 'https://developer.atlassian.com/server/confluence/confluence-rest-api-examples/',
+    permissionDocUrl: 'https://developer.atlassian.com/server/confluence/confluence-rest-api-examples/',
+    permissionPageUrl: '',
+    requiredPermissions: [],
+    fields: [
+      { key: 'base_url', labelKey: 'datasource.field.confluenceBaseUrl', placeholder: 'http://confluence.eainc.com:8090/' },
+      { key: 'username', labelKey: 'datasource.field.username', placeholder: '' },
+      { key: 'password', labelKey: 'datasource.field.password', placeholder: '', secret: true },
     ],
   },
 ])
@@ -578,6 +591,7 @@ const resourceTypeLabelMap: Record<string, string> = {
   wiki_space: 'datasource.resourceType.wikiSpace',
   doc_category: 'datasource.resourceType.docCategory',
   book: 'datasource.resourceType.book',
+  confluence_space: 'datasource.resourceType.confluenceSpace',
 }
 
 function resourceTypeLabel(type: string): string {
