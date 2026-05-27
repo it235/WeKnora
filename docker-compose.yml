@@ -194,7 +194,6 @@ services:
       - WEKNORA_TENANT_ENABLE_RBAC=${WEKNORA_TENANT_ENABLE_RBAC:-}
       - WEKNORA_TENANT_MAX_OWNED_PER_USER=${WEKNORA_TENANT_MAX_OWNED_PER_USER:-}
       - APK_MIRROR_ARG=${APK_MIRROR_ARG:-}
-      - WEKNORA_BOOTSTRAP_SYSTEM_ADMIN_EMAIL=${WEKNORA_BOOTSTRAP_SYSTEM_ADMIN_EMAIL:-}
     depends_on:
       redis:
         condition: service_started
@@ -206,6 +205,7 @@ services:
       - WeKnora-network
     restart: unless-stopped
     extra_hosts:
+      - "minio-sh-unpro.eainc.com:192.168.36.106"
       - "host.docker.internal:host-gateway"
 
   # Sandbox 镜像：仅用于 build/pull，非常驻服务；app 执行 Skills 时按需 docker run 该镜像，用毕即释
