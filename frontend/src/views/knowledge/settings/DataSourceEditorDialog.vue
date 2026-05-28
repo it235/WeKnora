@@ -257,7 +257,7 @@ const connectorDefs = computed<ConnectorDef[]>(() => [
     permissionPageUrl: '',
     requiredPermissions: [],
     fields: [
-      { key: 'base_url', labelKey: 'datasource.field.confluenceBaseUrl', placeholder: 'http://confluence.eainc.com:8090/' },
+      { key: 'base_url', labelKey: 'datasource.field.confluenceBaseUrl', placeholder: 'confluence base url' },
       { key: 'username', labelKey: 'datasource.field.username', placeholder: '' },
       { key: 'password', labelKey: 'datasource.field.password', placeholder: '', secret: true },
     ],

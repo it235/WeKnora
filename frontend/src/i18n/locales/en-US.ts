@@ -4499,7 +4499,7 @@ export default {
     guideStep1_notion: 'Open the page or database you want to sync in Notion',
     guideStep2_notion: 'Click the "···" menu at the top right, select "Connect to" or "Add connections"',
     guideStep3_notion: 'Search and select your Integration app, then come back and click Retry',
-    guideStep1_confluence: 'Confirm the Base URL is the Confluence site root, for example http://confluence.eainc.com:8090',
+    guideStep1_confluence: 'Confirm the Base URL is the Confluence site root, for example http://confluence.xxxx.com:8090',
     guideStep2_confluence: 'Confirm the username/password can sign in and read the target spaces',
     guideStep3_confluence: 'If Basic Auth is disabled, use a REST-capable access token as the password',
     permissionDocLink: 'View Feishu wiki permission docs',

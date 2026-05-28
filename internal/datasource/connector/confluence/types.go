@@ -17,9 +17,9 @@ import (
 )
 
 const (
-	defaultBaseURL  = "http://confluence.eainc.com:8090"
-	defaultMaxDepth = 3
-	defaultMaxPages = 500
+	defaultBaseURL  = "http://confluence.xxx.com:8090"
+	defaultMaxDepth = 5
+	defaultMaxPages = 5000
 )
 
 // Config holds Confluence-specific configuration.

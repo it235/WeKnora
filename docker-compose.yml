@@ -45,6 +45,11 @@ services:
       # to config/builtin_models.yaml, edit it for your deployment, then
       # uncomment the line below. See docs/BUILTIN_MODELS.md.
       # - ./config/builtin_models.yaml:/app/config/builtin_models.yaml:ro
+      # Optional: mount custom CA certificates (e.g. for self-signed internal LLM gateways).
+      # Drop your *.crt files into ./docker/certs/ on the host; the entrypoint will
+      # run update-ca-certificates so Go picks up both your private CA AND the
+      # bundled public CAs. Each cert MUST have .crt extension and be PEM encoded.
+      - ./docker/certs:/usr/local/share/ca-certificates/weknora-extra:ro
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -181,7 +186,6 @@ services:
       # File size limit (in MB)
       - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
       # Agent Skills Sandbox
-      - SSL_CERT_FILE=${SSL_CERT_FILE:/app/internal-ca.crt}
       - WEKNORA_SANDBOX_MODE=${WEKNORA_SANDBOX_MODE:-docker}
       - WEKNORA_SANDBOX_TIMEOUT=${WEKNORA_SANDBOX_TIMEOUT:-60}
       - WEKNORA_SANDBOX_DOCKER_IMAGE=${WEKNORA_SANDBOX_DOCKER_IMAGE:-wechatopenai/weknora-sandbox:${WEKNORA_VERSION:-latest}}
@@ -205,10 +209,11 @@ services:
     networks:
       - WeKnora-network
     restart: unless-stopped
+    # 以下几个变量可以去除，也可以在.env中配置
     extra_hosts:
-      - "minio-sh-unpro.eainc.com:192.168.36.106"
-      - "confluence.eainc.com:192.168.35.119"
-      - "192.168.34.106:192.168.34.106"
+      - "${MINIO_ENDPOINT_HOSTS_MAPPING:-minio.xxx.com:127.0.0.1}"
+      - "${CONFLUENCE_ENDPOINT_HOSTS_MAPPING:-confluence.xxx.com:127.0.0.1}"
+      - "${LITELLM_ENDPOINT_HOSTS_MAPPING:-litellm.xxx.com:127.0.0.1}"
       - "host.docker.internal:host-gateway"
 
   # Sandbox 镜像：仅用于 build/pull，非常驻服务；app 执行 Skills 时按需 docker run 该镜像，用毕即释

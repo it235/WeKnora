@@ -39,5 +39,20 @@ if [ -d "$BUILTIN_DIR" ]; then
     chown -R appuser:appuser "$PRELOADED_DIR"
 fi
 
+# ─── Merge custom CA certificates into the system trust store ───
+# Users mount their internal/self-signed CA certs into
+# /usr/local/share/ca-certificates/weknora-extra/ via docker-compose.yml.
+# Running update-ca-certificates appends them to /etc/ssl/certs/ca-certificates.crt,
+# which is the default bundle Go's crypto/x509 reads on Debian. This way the
+# private CA is *added* to (not *replacing*) the system bundle, so calls to
+# both internal HTTPS endpoints (e.g. https://litellm.xxx.com) and public
+# ones (api.openai.com, etc.) keep working.
+EXTRA_CA_DIR="/usr/local/share/ca-certificates/weknora-extra"
+if [ -d "$EXTRA_CA_DIR" ] && [ -n "$(ls -A "$EXTRA_CA_DIR" 2>/dev/null | grep -i '\.crt$' || true)" ]; then
+    echo "[entrypoint] found custom CA cert(s) in $EXTRA_CA_DIR, refreshing system trust store..."
+    update-ca-certificates 2>&1 | sed 's/^/[entrypoint][ca-certificates] /' || \
+        echo "[entrypoint] WARN: update-ca-certificates failed; private CA may not be trusted"
+fi
+
 # ─── Drop privileges and exec the main process ───
 exec gosu appuser "$@"

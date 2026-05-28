@@ -4494,7 +4494,7 @@ export default {
     guideStep1_notion: "在 Notion 中打开你想要同步的页面或数据库",
     guideStep2_notion: "点击右上角的「···」菜单，选择「Connect to」或「Add connections」",
     guideStep3_notion: "搜索并选择你的集成应用（Integration），然后回到这里点重新加载",
-    guideStep1_confluence: "确认 Base URL 是 Confluence 站点根地址，例如 http://confluence.eainc.com:8090",
+    guideStep1_confluence: "确认 Base URL 是 Confluence 站点根地址，例如 http://confluence.xxx.com:8090",
     guideStep2_confluence: "确认账号密码可登录 Confluence，并拥有目标空间的阅读权限",
     guideStep3_confluence: "如果企业禁用了 Basic Auth，请改用可用于 REST API 的访问令牌作为密码",
     permissionDocLink: "查看飞书知识库权限配置文档",
