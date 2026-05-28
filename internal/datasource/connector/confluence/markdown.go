@@ -161,6 +161,8 @@ func convertTables(content string) string {
 	tableRe := regexp.MustCompile(`(?is)<table[^>]*>(.*?)</table>`)
 	rowRe := regexp.MustCompile(`(?is)<tr[^>]*>(.*?)</tr>`)
 	cellRe := regexp.MustCompile(`(?is)<t[hd][^>]*>(.*?)</t[hd]>`)
+	brRe := regexp.MustCompile(`(?is)<br\s*/?>`)
+	nlRe := regexp.MustCompile(`\s*\n\s*`)
 	return tableRe.ReplaceAllStringFunc(content, func(match string) string {
 		m := tableRe.FindStringSubmatch(match)
 		if len(m) < 2 {
@@ -170,7 +172,14 @@ func convertTables(content string) string {
 		for _, row := range rowRe.FindAllStringSubmatch(m[1], -1) {
 			var cells []string
 			for _, cell := range cellRe.FindAllStringSubmatch(row[1], -1) {
-				cells = append(cells, strings.ReplaceAll(strings.TrimSpace(stripTags(cell[1])), "|", "\\|"))
+				cellText := cell[1]
+				// Convert <br> tags to newlines before stripping all tags
+				cellText = brRe.ReplaceAllString(cellText, "\n")
+				cellText = strings.TrimSpace(stripTags(cellText))
+				// Replace newlines with <br> to keep table row on a single line
+				cellText = nlRe.ReplaceAllString(cellText, "<br>")
+				cellText = strings.ReplaceAll(cellText, "|", "\\|")
+				cells = append(cells, cellText)
 			}
 			if len(cells) == 0 {
 				continue

@@ -181,6 +181,7 @@ services:
       # File size limit (in MB)
       - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
       # Agent Skills Sandbox
+      - SSL_CERT_FILE=${SSL_CERT_FILE:/app/internal-ca.crt}
       - WEKNORA_SANDBOX_MODE=${WEKNORA_SANDBOX_MODE:-docker}
       - WEKNORA_SANDBOX_TIMEOUT=${WEKNORA_SANDBOX_TIMEOUT:-60}
       - WEKNORA_SANDBOX_DOCKER_IMAGE=${WEKNORA_SANDBOX_DOCKER_IMAGE:-wechatopenai/weknora-sandbox:${WEKNORA_VERSION:-latest}}
@@ -206,6 +207,8 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "minio-sh-unpro.eainc.com:192.168.36.106"
+      - "confluence.eainc.com:192.168.35.119"
+      - "192.168.34.106:192.168.34.106"
       - "host.docker.internal:host-gateway"
 
   # Sandbox 镜像：仅用于 build/pull，非常驻服务；app 执行 Skills 时按需 docker run 该镜像，用毕即释
